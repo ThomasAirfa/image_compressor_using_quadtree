@@ -1,0 +1,63 @@
+CC := gcc
+CFLAGS := -Wall -Wextra -O2 -Iinclude -fPIC
+LFLAGS = -shared
+
+BIN_DIR := bin
+OBJ_DIR := obj
+SRC_DIR := src
+LIB_DIR := lib
+
+LIB := $(LIB_DIR)/libqtc.so
+QUADTREE_C := $(SRC_DIR)/quadtree.c
+QUADTREE_O := $(OBJ_DIR)/quadtree.o
+UTILS_C := $(SRC_DIR)/utils.c
+UTILS_O := $(OBJ_DIR)/utils.o
+IMAGE_C := $(SRC_DIR)/image.c
+IMAGE_O := $(OBJ_DIR)/image.o
+ENCODE_C := $(SRC_DIR)/encode.c
+ENCODE_O := $(OBJ_DIR)/encode.o
+DECODE_C := $(SRC_DIR)/decode.c
+DECODE_O := $(OBJ_DIR)/decode.o
+BIT_C := $(SRC_DIR)/bit.c
+BIT_O := $(OBJ_DIR)/bit.o
+SEGMENTATION_GRID_C := $(SRC_DIR)/segmentation_grid.c
+SEGMENTATION_GRID_O := $(OBJ_DIR)/segmentation_grid.o
+
+all: $(LIB)
+
+$(LIB): $(QUADTREE_O) $(UTILS_O) $(IMAGE_O) $(ENCODE_O) $(BIT_O) $(DECODE_O) $(SEGMENTATION_GRID_O)
+	@mkdir -p $(LIB_DIR)
+	$(CC) $(LFLAGS) -o $@ $^ -lm
+
+$(QUADTREE_O): $(QUADTREE_C)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@ 
+
+$(IMAGE_O): $(IMAGE_C)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(UTILS_O): $(UTILS_C)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(ENCODE_O): $(ENCODE_C)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BIT_O): $(BIT_C)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(DECODE_O): $(DECODE_C)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SEGMENTATION_GRID_O): $(SEGMENTATION_GRID_C)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJ_DIR)/* $(LIB)
+
+.PHONY: all clean
